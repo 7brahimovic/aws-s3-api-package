@@ -39,8 +39,8 @@ let DownloadFolder = function (folderName) {
         var zip = s3Zip
           .archive(
             {
-              region: "ap-northeast-1",
-              bucket: bucket,
+              region: process.env["AWS_REGION"],
+              bucket: process.env["AWS_BUCKET_NAME"],
               preserveFolderStructure: true,
             },
             "",
@@ -52,29 +52,6 @@ let DownloadFolder = function (folderName) {
     });
   });
 
-  // const files = s3.listObjectsV2(params, function (err, data) {
-  //   if (err) {
-  //     console.log(err, err.stack);
-  //   } else {
-  //     var jsonFromAWS = JSON.stringify(data, "Key", 6);
-  //     var jsonContent = JSON.parse(jsonFromAWS).Contents;
-  //     var result = AddingIsFolderKey(toTree(jsonContent));
-
-  //     console.log(result);
-
-  //     jsonContent.map((x) => filesArray.push(x.Key));
-
-  //     console.log(filesArray)
-
-  //       const output = fs.createWriteStream();
-
-  //       var zip = s3Zip
-  //       .archive({ region: "ap-northeast-1", bucket: bucket, preserveFolderStructure: true }, "",  filesArray)
-  //      .pipe(output);
-
-  //      return zip;
-  //   }
-  // });
 };
 
 module.exports = DownloadFolder;
@@ -84,10 +61,7 @@ function AddingIsFolderKey(root) {
 
   objs.forEach((obj) => {
     var keys = Object.keys(obj);
-    //  if(keys.length>6)
 
-    //if(JSON.stringify(obj["DownloadLink"]).match("/"))?????
-    //if(toString(obj["DownloadLink"]).includes("/"))
     if (keys.length > 6) {
       obj["IsFolder"] = "True";
 
